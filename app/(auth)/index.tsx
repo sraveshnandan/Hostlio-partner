@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { AuthContainer, Button, Header, InputBox, Loader } from '@/components'
-import { Keyboard, Text, View } from 'react-native'
+import { Keyboard, Text, TouchableOpacity, View } from 'react-native'
 import { router } from 'expo-router'
 import { showToast } from '@/utils'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
 import { login, resetStatus } from '@/redux/reducers/auth.reducer'
+import ForgotPasswordModal from '@/components/modals/ForgotPasswordModal'
+
 
 const MainAuthScreen = () => {
     const dispatch = useDispatch()
     const { isLoading, isSuccess, isError, user, errMSg } = useSelector((state: RootState) => state.auth)
     const [email, setemail] = useState<string>("");
     const [password, setpassword] = useState<string>("");
+    const [forgotPassModalState, setforgotPassModalState] = useState<boolean>(false)
 
     // handling login action 
     const handleLoginFn = async () => {
@@ -29,15 +32,26 @@ const MainAuthScreen = () => {
     }
 
 
+    // handling forgot password 
+    const handleForgotPassword = () => {
+        if (Keyboard.isVisible()) {
+            Keyboard.dismiss()
+            return setforgotPassModalState(prev => !prev)
+
+        }
+        setforgotPassModalState(prev => !prev)
+    }
+
+
 
     useEffect(() => {
         if (!isLoading && user.first_name && user.email_verified) {
             return router.replace(`/(tabs)/Home/`)
         } else if (user && user.first_name && !user.email_verified) {
-            return router.replace("/(auth)/verification")
+            return router.push("/(auth)/verification")
         } else if (errMSg.length > 0) {
             if (errMSg === "Your account is not verified yet, please verify your account.") {
-                return router.replace(`/(auth)/verification?email=${email}`)
+                return router.push(`/(auth)/verification?email=${email}`)
             }
 
             return showToast(errMSg, "error", "Something went wrong.")
@@ -49,6 +63,11 @@ const MainAuthScreen = () => {
     }, [])
     return (
         <AuthContainer verticallyCenter={true}>
+            {
+                forgotPassModalState && (
+                    <ForgotPasswordModal title='Password Recovery' isOpen={forgotPassModalState} setIsOpen={setforgotPassModalState as any} />
+                )
+            }
 
             {isLoading && (
                 <Loader loadingMessage='Please wait...' />
@@ -59,6 +78,11 @@ const MainAuthScreen = () => {
             <InputBox type='email' onChange={(data) => setemail(data)} lable='Enter your email address' placeholder='email address' value={email} />
             <InputBox passwordBox onChange={(data) => setpassword(data)} lable='Enter your password' placeholder='password' value={password} />
 
+            <View className='w-full flex-row items-center justify-end'>
+                <Text onPress={() => handleForgotPassword()} className='border-b-2 border-b-gray-200 pb-1 text-Primary'>Forgot Password</Text>
+
+            </View>
+
             {/* login Button  */}
             <Button lable='Login' loading={isLoading} disabled={isLoading} onPress={() => handleLoginFn()} />
 
@@ -67,6 +91,8 @@ const MainAuthScreen = () => {
                 <Text>Don't have an account? </Text>
                 <Text onPress={() => router.push(`/(auth)/register`)} className='underline font-medium text-md'>Register</Text>
             </View>
+
+
         </AuthContainer>
 
     )

@@ -1,4 +1,4 @@
-import { View, ScrollView, Keyboard } from 'react-native';
+import { View, ScrollView, Keyboard, KeyboardAvoidingView } from 'react-native';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
@@ -131,7 +131,7 @@ const CreateListingScreen = () => {
     return (
 
 
-        <View className='flex-1 bg-white pt-2 px-[2%]'>
+        <KeyboardAvoidingView className='flex-1 bg-white pt-2 px-[2%]'>
             {
                 loading && (
                     <Loader loadingMessage='Please wait...' />
@@ -266,7 +266,7 @@ const CreateListingScreen = () => {
                 </View>
             </View>
 
-        </View>
+        </KeyboardAvoidingView>
     )
 }
 

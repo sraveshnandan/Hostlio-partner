@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { AuthContainer, BackButton, Button, Header, ImageSelector, InputBox, Loader } from '@/components';
-import { Keyboard, ScrollView } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import { handleFileUpload, showToast } from '@/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { IRegistrationPayload } from '@/types';
 import { register } from '@/redux/reducers/auth.reducer';
+import { Platform } from 'react-native';
 
 const RegisterScreen = () => {
     const dispatch = useDispatch()
@@ -92,23 +93,28 @@ const RegisterScreen = () => {
             }
             <BackButton />
             <ScrollView className='flex-1' showsVerticalScrollIndicator={false}>
+
                 <Header title='Register yourself' center={true} noSubtitle />
 
                 <ImageSelector onImageSelected={(value) => setavatarFile(value)} />
 
-                <InputBox value={RegistrationPayload.first_name} lable='Enter your first name' placeholder='First Name' onChange={(value) => setRegistrationPayload(prev => ({ ...prev, first_name: value }))} />
 
-                <InputBox type='default' value={RegistrationPayload.last_name} lable='Enter your last name' placeholder='Last Name' onChange={(value) => setRegistrationPayload(prev => ({ ...prev, last_name: value }))} />
+                <InputBox value={RegistrationPayload.first_name} lable='Enter your first name' placeholder='First Name' onChange={(value) => setRegistrationPayload(prev => ({ ...prev, first_name: value.trim() }))} />
 
-                <InputBox type='email' value={RegistrationPayload.email} lable='Enter your email' placeholder='Email address' onChange={(value) => setRegistrationPayload(prev => ({ ...prev, email: value }))} />
+                <InputBox type='default' value={RegistrationPayload.last_name} lable='Enter your last name' placeholder='Last Name' onChange={(value) => setRegistrationPayload(prev => ({ ...prev, last_name: value.trim() }))} />
 
-                <InputBox type='password' passwordBox value={RegistrationPayload.email} lable='Enter your password' placeholder='Password' onChange={(value) => setRegistrationPayload(prev => ({ ...prev, password: value }))} />
+                <InputBox type='email' value={RegistrationPayload.email} lable='Enter your email' placeholder='Email address' onChange={(value) => setRegistrationPayload(prev => ({ ...prev, email: value.trim() }))} />
+
+                <InputBox type='password' passwordBox value={RegistrationPayload.email} lable='Enter your password' placeholder='Password' onChange={(value) => setRegistrationPayload(prev => ({ ...prev, password: value.trim() }))} />
 
                 <Button disabled={uploading} loading={uploading} lable='Register' onPress={() => handleRegistration()} />
+
+
+
             </ScrollView>
 
 
-        </AuthContainer>
+        </AuthContainer >
     )
 }
 

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { AuthContainer, Button, Header, Loader, OTPInputBox, Timer } from '@/components';
+import { AuthContainer, BackButton, Button, Header, Loader, OTPInputBox, Timer } from '@/components';
 import { Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
@@ -82,13 +82,9 @@ const VerificationScreen = () => {
         }
 
     }
-
-
-
-    console.log(params)
-
     return (
         <AuthContainer>
+            <BackButton />
 
             {
                 isLoading && <Loader loadingMessage='Verifying OTP.' />

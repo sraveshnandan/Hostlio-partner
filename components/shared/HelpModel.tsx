@@ -1,7 +1,7 @@
 import { Text, TouchableOpacity, View } from 'react-native'
 import React, { Dispatch, SetStateAction } from 'react'
 import Animated from 'react-native-reanimated'
-import { Colors, hp, wp } from '@/constants'
+import { hp, wp } from '@/constants'
 import Header from './Header'
 import * as Linking from "expo-linking"
 import { Ionicons, MaterialCommunityIcons, Octicons } from '@expo/vector-icons'

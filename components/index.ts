@@ -18,3 +18,4 @@ export { default as ToggleSwitches } from "./shared/Toggleswitches";
 export { default as ImageSlider } from "./shared/ImageSlider";
 export { default as HelpModel } from "./shared/HelpModel";
 export { default as EmptyBox } from "./shared/emptyBox";
+export { default as forgotPasswordModal } from "./modals/ForgotPasswordModal";

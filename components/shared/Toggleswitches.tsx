@@ -20,7 +20,6 @@ const Toggleswitches = ({
         seton(prev => !prev);
         return onValueChange(on)
     }
-
     return (
         <View className='w-full bg-white shadow-md shadow-black my-2 flex-row items-center justify-between py-1 px-2 rounded-xl'>
             <View className=''>

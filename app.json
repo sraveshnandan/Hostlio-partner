@@ -2,7 +2,7 @@
   "expo": {
     "name": "Hostlio Partner",
     "slug": "hostlio_partner",
-    "version": "1.0.1",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -20,11 +20,11 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "versionCode": 1,
+      "versionCode": 3,
       "permissions": [
         "android.permission.RECORD_AUDIO"
       ],
-      "package": "com.sravesh.hostlio_partner"
+      "package": "com.xecurecode.hostlio_partner"
     },
     "web": {
       "bundler": "metro",

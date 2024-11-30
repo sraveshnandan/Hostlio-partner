@@ -28,10 +28,10 @@ const HomeScreen = () => {
             return router.push(data.link)
         }
         if (data.name === "Sign Out") {
+            showToast("Logged out successfully.", "success", "");
             dispatch(logout());
             dispatch(removeAlldata())
-            showToast("Logged out successfully.", "success", "");
-            return router.replace(`/(auth)/`)
+            router.replace(`/(auth)/`)
         }
         if (data.name === "Help Center") {
             return setmodelOpen(true)
@@ -44,8 +44,6 @@ const HomeScreen = () => {
 
 
     }
-
-    console.log(userListing)
     return (
         <>
 

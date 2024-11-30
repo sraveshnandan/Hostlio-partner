@@ -1,4 +1,4 @@
-import { View, ScrollView, Keyboard } from 'react-native';
+import { View, ScrollView, Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
@@ -18,32 +18,32 @@ const UpdateListingScreen = () => {
     const [currentStep, setcurrentStep] = useState<number>(0);
     const [loading, setloading] = useState(false);
     const [uploading, setuploading] = useState(false);
-    const [ListingData, setListingData] = useState<Record<string, any>>(userListing)
-    const [ListingBanners, setListingBanners] = useState<ImagePickerAsset[]>([]);
+    const [ListingData, setListingData] = useState<Record<string, any>>({...userListing,category:userListing?.category?._id})
+    const [ListingBanners, setListingBanners] = useState<ImagePickerAsset[]>(userListing?.banners);
     const [ListingExtraData, setListingExtraData] = useState({
         main_city: userListing.extra.main_city,
         details: userListing.extra.details,
         friends_allowed: false,
-        for_all: false,
-        for_boys: false,
-        for_girls: false,
-        for_family: false
+        for_all: userListing.extra.for_all,
+        for_boys: userListing.extra.for_boys,
+        for_girls: userListing.extra.for_girls,
+        for_family: userListing.extra.for_family
     })
     const [NewListingDistanceData, setNewListingDistanceData] = useState({
-        railway_station: userListing?.distance?.railway_station | 0,
-        library: userListing?.distance?.library | 0,
-        mall: userListing?.distance?.mall | 0,
-        medical_shop: userListing?.distance?.medical_shop | 0
+        railway_station: userListing?.extra?.distance?.railway_station | 100,
+        library: userListing?.extra?.distance?.library | 100,
+        mall: userListing?.extra?.distance?.mall | 100,
+        medical_shop: userListing?.extra?.distance?.medical_shop | 100
     });
     const handleUpdateListing = async () => {
         Keyboard.dismiss();
         try {
             setloading(true);
+            delete ListingData._id
 
             const updatePayload =
             {
                 ...ListingData,
-                _id: undefined,
                 category: ListingData?.category?._id ? ListingData?.category?._id : category,
                 id: userListing._id,
                 owner: user._id,
@@ -51,6 +51,7 @@ const UpdateListingScreen = () => {
                     ...ListingExtraData, distance: NewListingDistanceData
                 }
             }
+
 
             const updatedListing = await handleListingUpdateAction(updatePayload, userListing._id, token);
             if (!updatedListing.success) {
@@ -73,9 +74,13 @@ const UpdateListingScreen = () => {
     };
 
 
+    console.log(ListingData.category)
+
 
     return userListing && (
-        <View className='flex-1 bg-white pt-2 px-[2%]'>
+        <KeyboardAvoidingView behavior={
+            Platform.OS === "ios" ? 'padding' : 'height'
+        } className='flex-1 bg-white pt-2 px-[2%]'>
             {loading && <Loader loadingMessage='Please wait...' />}
             {uploading && <Loader loadingMessage='Uploading Images...' />}
 
@@ -95,7 +100,7 @@ const UpdateListingScreen = () => {
 
                         <InputBox value={ListingData.address} multiLine lable='Address' placeholder='e.g:  Bus Stand, Bihar Sahrif,(Nalanda),803101' onChange={(value) => setListingData(prev => ({ ...prev, address: value.trim() }))} />
 
-                        <InputBox type='numeric' lable='Contact No:-' placeholder='e.g:  +91 9126126126' onChange={(value) => setListingData(prev => ({ ...prev, contact_no: String(value) }))} />
+                        <InputBox type='numeric' lable='Contact No:-' value={ListingData.contact_no ? String(ListingData.contact_no) : String(user.phone_no)} placeholder='e.g:  +91 9126126126' onChange={(value) => setListingData(prev => ({ ...prev, contact_no: String(value) }))} />
 
                         <InputBox type='numeric' value={String(ListingData.monthly_rent)} lable='Montlly Rent' placeholder='e.g: ₹5000' onChange={(value) => setListingData(prev => ({ ...prev, monthly_rent: Number(value.trim()) }))} />
 
@@ -159,18 +164,18 @@ const UpdateListingScreen = () => {
                             <View
                                 className='my-4 border-b-2 border-b-gray-200 pb-4 '
                             >
-                                <Header title='Distance  Details' center subtitle='Add nearest distance from your property in Meater.' />
+                                <Header title='Distance  Details ' center subtitle='Add nearest distance from your property in Meater.' />
                             </View>
 
 
                             <View className='my-2'>
-                                <InputBox type='numeric' value={`${String(userListing?.extra?.distance?.railway_station)} M`} lable='Nearest Railway station' placeholder={`${userListing?.extra?.distance?.railway_station} M`} onChange={(value) => setNewListingDistanceData(prev => ({ ...prev, railway_station: Number(value) }))} />
+                                <InputBox type='numeric' value={`${String(userListing?.extra?.distance?.railway_station)}`} lable='Nearest Railway station' placeholder={`${userListing?.extra?.distance?.railway_station} M`} onChange={(value) => setNewListingDistanceData(prev => ({ ...prev, railway_station: Number(value) }))} />
 
-                                <InputBox type='numeric' value={`${String(userListing?.extra?.distance?.mall)} M`} lable='Nearest Library' placeholder={`${userListing?.extra?.distance?.library} M`} onChange={(value) => setNewListingDistanceData(prev => ({ ...prev, library: Number(value) }))} />
+                                <InputBox type='numeric' value={`${String(userListing?.extra?.distance?.mall)}`} lable='Nearest Library' placeholder={`${userListing?.extra?.distance?.library}`} onChange={(value) => setNewListingDistanceData(prev => ({ ...prev, library: Number(value) }))} />
 
-                                <InputBox type='numeric' value={`${String(userListing?.extra?.distance?.mall)} M`} lable='Nearest Mall/Supermarket' placeholder={`${userListing?.extra?.distance?.mall} M`} onChange={(value) => setNewListingDistanceData(prev => ({ ...prev, mall: Number(value) }))} />
+                                <InputBox type='numeric' value={`${String(userListing?.extra?.distance?.mall)}`} lable='Nearest Mall/Supermarket' placeholder={`${userListing?.extra?.distance?.mall} M`} onChange={(value) => setNewListingDistanceData(prev => ({ ...prev, mall: Number(value) }))} />
 
-                                <InputBox type='numeric' value={`${String(userListing?.extra?.distance?.mall)} M`} lable='Nearest Medical Shop' placeholder={`${userListing?.extra?.distance?.medical_shop} M`} onChange={(value) => setNewListingDistanceData(prev => ({ ...prev, medical_shop: Number(value) }))} />
+                                <InputBox type='numeric' value={`${String(userListing?.extra?.distance?.mall)}`} lable='Nearest Medical Shop' placeholder={`${userListing?.extra?.distance?.medical_shop} M`} onChange={(value) => setNewListingDistanceData(prev => ({ ...prev, medical_shop: Number(value) }))} />
                             </View>
 
 
@@ -192,7 +197,7 @@ const UpdateListingScreen = () => {
                     <Button lable={currentStep === 3 ? "Update Listing" : "Next"} onPress={currentStep === 3 ? handleUpdateListing : () => setcurrentStep(prev => prev + 1)} />
                 </View>
             </View>
-        </View>
+        </KeyboardAvoidingView>
     );
 };
 

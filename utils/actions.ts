@@ -170,6 +170,65 @@ const HandleOTPResendAction = async (email: string) => {
 }
 
 
+
+// password reset 
+
+
+const handleForgotPasswordAction = async (email: string) => {
+    try {
+
+        const query = gql`
+      query handleForgotPassword($email:String!){
+        forgotPassword(email:$email)
+      }
+      `;
+        const variables = {
+            email
+        }
+
+        const res: any = await gql_client.request(query, variables);
+
+        return {
+            success: true,
+            res
+        }
+
+    } catch (error: any) {
+        return {
+            success: false,
+            message: error.response.errors[0].message
+        }
+    }
+}
+
+
+const handlePasswordResetAction = async (data: any) => {
+    try {
+
+        const query = gql`
+      query ResetPassword($data:PasswordResetInput){
+    resetPassword(data:$data)
+  }
+      `;
+
+        const variables = {
+            data: { ...data }
+        }
+
+        const res = await gql_client.request(query, variables);
+        return {
+            success: true,
+            res
+        }
+
+    } catch (error: any) {
+        return {
+            success: false,
+            message: error.response.errors[0].message
+        }
+    }
+}
+
 const handleGetAllCategories = async (dispatch: any) => {
     try {
 
@@ -510,4 +569,4 @@ const handleNotificationStatus = async (id: string, token: string) => {
 }
 
 
-export { handleLoginAction, handleRegistrationAction, handleFetchUserProfile, handleOTPVerify, HandleOTPResendAction, handleGetAllCategories, handleProfileUpdateAction, handleListingCraeteAction, GetUserListing, handleListingUpdateAction, handleGetUserNotifications, handleNotificationStatus }
+export { handleLoginAction, handleRegistrationAction, handleFetchUserProfile, handleOTPVerify, HandleOTPResendAction, handleGetAllCategories, handleProfileUpdateAction, handleListingCraeteAction, GetUserListing, handleListingUpdateAction, handleGetUserNotifications, handleNotificationStatus, handleForgotPasswordAction, handlePasswordResetAction }

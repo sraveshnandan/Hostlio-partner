@@ -102,7 +102,7 @@ const HomeScreen = () => {
 
 
                                 <View className='flex-row items-center '>
-                                    <Text className='text-3xl text-Primary font-medium'>{userListing?.name}</Text>
+                                    <Text numberOfLines={1} className='text-3xl text-Primary font-medium'>{userListing?.name.substring(0, 15)}...</Text>
 
                                     <Text className='ml-4 bg-gray-200 py-1 px-4 rounded-full text-AscentTwo font-semibold'>{userListing?.category?.name}</Text>
                                 </View>
@@ -132,15 +132,15 @@ const HomeScreen = () => {
                                         <Text className={`font-semibold ${userListing?.extra?.for_all && "text-white"} mr-2`}>For All</Text>
                                     </View>
                                     <View className={`bg-gray-200 mx-1 px-3 py-2 flex-row items-center rounded-full ${userListing?.extra?.for_boys && "bg-green-600"}`}>
-                                        <Text className='font-semibold mr-2'>For Boys</Text>
+                                        <Text className={`font-semibold mr-2 ${userListing?.extra?.for_boys && "text-white"}`}>For Boys</Text>
                                     </View>
 
                                     <View className={`bg-gray-200 mx-1 px-3 py-2 flex-row items-center rounded-full ${userListing?.extra?.for_girls && "bg-green-600"}`}>
-                                        <Text className='font-semibold mr-2'>For Girls</Text>
+                                        <Text className={`font-semibold mr-2 ${userListing?.extra?.for_girls && "text-white"}`}>For Girls</Text>
                                     </View>
 
                                     <View className={`bg-gray-200 mx-1 px-3 py-2 flex-row items-center rounded-full ${userListing?.extra?.for_family === true && "bg-green-600"}`}>
-                                        <Text className='font-semibold mr-2'>For Family</Text>
+                                        <Text className={`font-semibold mr-2 ${userListing?.extra?.for_family && "text-white"}`}>For Family</Text>
                                     </View>
                                 </View>
 
@@ -174,7 +174,7 @@ const HomeScreen = () => {
                                     <View className='flex-row mt-2 flex-wrap'>
                                         {
                                             userListing?.facilities?.map((item: string, index: number) => (
-                                                <Text className='bg-AscentTwo m-2 px-3 py-2 text-white font-semibold rounded-full' key={index}>{item.toUpperCase()}</Text>
+                                                <Text className='bg-AscentTwo m-2 px-3 py-2 text-white font-semibold rounded-full' key={index}>{item}</Text>
                                             ))
                                         }
                                     </View>

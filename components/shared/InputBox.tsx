@@ -22,15 +22,13 @@ const InputBox = ({ placeholder, multiLine = false, value, lable, onChange, pass
 
 
     return (
-        <KeyboardAvoidingView behavior={
-            Platform.OS === "ios" ? 'padding' : 'height'
-        } className='w-full my-1'>
+        <View className='w-full my-1'>
             <Text className='text-md'>{lable}</Text>
             <View className='flex-row items-center mt-1  border-2 border-Primary rounded-md overflow-hidden'>
                 <TextInput multiline={multiLine} keyboardType={type as any} secureTextEntry={passwordBox && hide} className={` text-lg font-semibold flex-grow p-2`} value={inputvalue} placeholder={placeholder} onChangeText={(value) => handleChange(value)} />
                 {passwordBox && <View className='mr-2'><Ionicons onPress={() => sethide(prev => !prev)} size={25} name={hide ? "eye-outline" : "eye-off-outline"} /></View>}
             </View>
-        </KeyboardAvoidingView>
+        </View>
     )
 }
 
